@@ -1,0 +1,1 @@
+for i in ../sample_traj/* ; do ln -s ${i} sample_$(basename ${i}) ; done
