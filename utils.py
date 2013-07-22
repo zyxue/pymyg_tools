@@ -37,6 +37,7 @@ def backup(output):
             newbasename =  '#' + basename + '.{0}#'.format(count)
             rn_to = os.path.join(dirname, newbasename)                 # rename to
         os.rename(output, rn_to)
+        print 'backup {0} => {1}'.format(output, rn_to)
 
 def print_progress(ts):
     if ts.frame % 2 == 0:

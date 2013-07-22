@@ -7,8 +7,7 @@ from MDAnalysis.core.AtomGroup import AtomGroup
 import utils
 
 def main(args):
-    if args.debug:
-        utils.main_load()
+    utils.main_load()
 
     # check the validity of output file name, do backup
     output = args.optf
@@ -16,19 +15,15 @@ def main(args):
         outputfile = '{0:s}.output.xvg'.format(args.grof)
     else:
         outputfile = output
-    utils.backup_old_output(outputfile)
+
+    utils.backup(outputfile)
 
     # Do some logging at the beginning
     outputf = open(outputfile, 'w')
     beginning_time = utils.write_header(outputf)
 
     # do calculation
-    result = calc_dihedral(
-        args.grof,
-        args.xtcf,
-        args.btime,
-        args.etime,
-        args.debug)
+    result = calc_dihedral(args.grof, args.xtcf, args.btime, args.etime)
 
     # write results to the outputfile
     for r in result:
@@ -91,7 +86,7 @@ def calc_dih(tets, t=0):
         dihs.append(dih)
     return ' {0:<8.0f}{1}\n'.format(t, ' '.join('{0:<4d}'.format(d) for d in dihs))
 
-def calc_dihedral(grof, xtcf, btime, etime=None, debug=None):
+def calc_dihedral(grof, xtcf, btime, etime):
     # xtcf=None, so if only gro file is parsed, it still works
     univer = Universe(grof, xtcf)
     
@@ -112,22 +107,16 @@ def calc_dihedral(grof, xtcf, btime, etime=None, debug=None):
         yield calc_dih(tets)
     else:
         for ts in univer.trajectory:
-            if etime > ts.time >= btime:
-                utils.debug_print(ts, debug)
-                res = calc_dih(tets, ts.time)
-                yield res
-            elif ts.time > etime:
-                break                                           # to finish right away
+            if btime > ts.time:
+                continue
+            if etime > 0 and etime < ts.time:
+                break
+
+            res = calc_dih(tets, ts.time)
+            yield res
+            utils.print_progress(ts)
 
 if __name__ == "__main__":
-    parser = utils.base_parser()
+    parser = utils.get_basic_parser()
     args = parser.parse_args()
     main(args)
-
-    # grof = 'sample_pro.gro'
-    # # xtcf = '/scratch/p/pomes/zyxue/mono_su_as/w300/sq1w/sq1w00/sq1w00_pro.xtc'
-    # xtcf = 'sample_pro.xtc'
-    # for d in calc_dihedral(grof, 0, 300000, xtcf, 1):
-    #     print d
-    # # xtcf = ''
-    
