@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
-"""Functionize it and make it act like a gromacs tool"""
-
+"""Reference: Andreas Vitalis, Xiaoling Wang and Rohi V.Pappu 2008 JMB"""
 import numpy as np
 from MDAnalysis import Universe
 
