@@ -29,7 +29,7 @@ def trjcat_plus(xtcf, tprf, output):
     usable_xtcf = []
     for f in xtcf:
         print "%" * 79
-        print "PROCESSING {0}".format(f)
+        print "gmxcheck-ing {0}".format(f)
         print "%" * 79
         returncode = subprocess.call(
             "gmxcheck -f {0}".format(f),
