@@ -16,14 +16,20 @@ def main(infile):
 
             sl = line.split()
             resname = sl[2][:3]
-            res_dir = 'r_rama_{0}'.format(resname)
-            if not os.path.exists(res_dir):
-                os.mkdir(res_dir)
+            res_dir = gen_res_dir(infile, resname)
+            basename = os.path.basename(infile)
             if resname not in opfs:
                 opf_name = os.path.join(
-                    res_dir, infile.replace('.xvg', '_{0}.xvg'.format(resname)))
+                    res_dir, basename.replace('.xvg', '_{0}.xvg'.format(resname)))
                 opfs[resname] = open(opf_name, 'w')
             opfs[resname].write(line)
+
+def gen_res_dir(infile, resname):
+    dir_ = os.path.dirname(infile)
+    res_dir = os.path.join(dir_, 'r_rama_{0}'.format(resname))
+    if not os.path.exists(res_dir):
+        os.mkdir(res_dir)
+    return res_dir
 
 if __name__ == "__main__":
     infiles = sys.argv[1:]
