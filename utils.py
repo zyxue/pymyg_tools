@@ -7,7 +7,7 @@ import argparse
 
 def main_load():
     print "#" * 79
-    print "{0:^79s}".format("SUCCESSFULLY LOAD main()! by Zhuyi Xue (zhuyi.xue@mail.utoronto.ca)")
+    print "{0:^79s}".format("SUCCESSFULLY LOAD main()! by Zhuyi Xue (zhuyi.xue@alum.utoronto.ca)")
     print "#" * 79
 
 def write_header(outputfile):
@@ -41,7 +41,10 @@ def backup(output):
 
 def print_progress(ts):
     if ts.frame % 2 == 0:
-        sys.stdout.write("\r[38;5;226mtime: {0:10.0f}; step: {1:10d}; frame: {2:10d}".format(
+        # [0m is used to get back to original color, in which  is different
+        # from the typed ^[. In Emacs, it's typed by pressing ctrl+[
+        # --zyxue-2013-12-19
+        sys.stdout.write('\r[38;5;226m time: {0:10.0f}; step: {1:10d}; frame: {2:10d} [0m'.format(
                 ts.time, ts.step, ts.frame))
         sys.stdout.flush()
 
